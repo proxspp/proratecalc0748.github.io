@@ -116,7 +116,7 @@ tfoot td:nth-child(6){color:var(--tax);background:var(--tax-bg)}
 <div class="box">
 <div class="hero"><div><h1>Prorate calculator</h1>
 <p class="sub">Split one discount fairly across your items, then add tax.</p></div>
-<label class="sw" title="More decimals (off = 2 decimals)"><input type="checkbox" id="dec" role="switch" aria-label="Show more decimals" autocomplete="off"></label></div>
+<label class="sw" title="More decimals (off = 3 decimals)"><input type="checkbox" id="dec" role="switch" aria-label="Show more decimals" autocomplete="off"></label></div>
 <div class="in">
 
 <div class="step"><i>1</i>Enter the discount and tax</div>
@@ -132,7 +132,7 @@ tfoot td:nth-child(6){color:var(--tax);background:var(--tax-bg)}
 <table>
 <thead><tr><th>Item</th><th>Price (₹)</th><th>% of total</th><th>Discount (−)</th><th>Price after discount</th><th id="taxHead">Tax / Adj. (±)</th><th>You pay</th><th></th></tr></thead>
 <tbody id="rows"></tbody>
-<tfoot><tr><td>Total</td><td id="tA">0.00</td><td id="tS">0%</td><td id="tD">0.00</td><td id="tAD">0.00</td><td id="tT">0.00</td><td id="tF">0.00</td><td></td></tr></tfoot>
+<tfoot><tr><td>Total</td><td id="tA">0.000</td><td id="tS">0%</td><td id="tD">0.000</td><td id="tAD">0.000</td><td id="tT">0.000</td><td id="tF">0.000</td><td></td></tr></tfoot>
 </table>
 </div>
 <div class="err" id="err" role="status"></div>
@@ -142,12 +142,12 @@ tfoot td:nth-child(6){color:var(--tax);background:var(--tax-bg)}
 
 <div class="step"><i>3</i>See the result</div>
 <div class="cards">
-  <div class="card c1"><span>Original total</span><strong id="sO">0.00</strong></div>
-  <div class="card c2"><span>Total discount</span><strong id="sD">0.00</strong></div>
-  <div class="card c3"><span>After discount</span><strong id="sAD">0.00</strong></div>
-  <div class="card c4"><span id="sTL">Total tax / adj.</span><strong id="sT">0.00</strong></div>
+  <div class="card c1"><span>Original total</span><strong id="sO">0.000</strong></div>
+  <div class="card c2"><span>Total discount</span><strong id="sD">0.000</strong></div>
+  <div class="card c3"><span>After discount</span><strong id="sAD">0.000</strong></div>
+  <div class="card c4"><span id="sTL">Total tax / adj.</span><strong id="sT">0.000</strong></div>
 </div>
-<div class="final"><span>Final total to pay</span><b id="sF">0.00</b></div>
+<div class="final"><span>Final total to pay</span><b id="sF">0.000</b></div>
 </div>
 <p class="note">Calculations always use full precision. The decimal toggle only changes how many decimals are shown, so a displayed total can differ from the sum of displayed rows by a small rounding amount.</p>
 </div>
@@ -157,17 +157,17 @@ tfoot td:nth-child(6){color:var(--tax);background:var(--tax-bg)}
 var rowsEl=document.getElementById("rows"),n=0;
 var $=function(id){return document.getElementById(id)};
 /* ---------- Number display: values are kept at full precision; only the display changes ----------
-   Toggle OFF: 2 decimals (71.43).  Toggle ON: up to 6 decimals (71.428571...), "..." when more digits exist. */
+   Toggle OFF: exactly 3 decimals (71.429).  Toggle ON: up to 6 decimals (71.428571...), "..." when more digits exist. */
 var moreOn=function(){return $("dec").checked};
 function clean(v){v=Math.round(v*1e9)/1e9;if(v===0)v=0;return isFinite(v)?v:0}   /* removes float noise and -0 */
 function fmt(v,group){
   v=clean(v);var more=moreOn();
-  var s=v.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:more?6:2,useGrouping:!!group});
+  var s=v.toLocaleString("en-IN",{minimumFractionDigits:3,maximumFractionDigits:more?6:3,useGrouping:!!group});
   if(more&&Math.abs(v-Math.round(v*1e6)/1e6)>1e-9)s+="...";
   return s;
 }
 function fmtIn(v){   /* text put back into an input box after Enter: no commas, no "..." */
-  return clean(v).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:moreOn()?6:2,useGrouping:false});
+  return clean(v).toLocaleString("en-US",{minimumFractionDigits:3,maximumFractionDigits:moreOn()?6:3,useGrouping:false});
 }
 var f=function(v){return fmt(v,true)};
 var nf=function(v){return fmt(v,false)};
@@ -291,7 +291,7 @@ function addRow(name,amt,focus){
   var tr=document.createElement("tr");
   tr.innerHTML='<td><input type="text" class="nm" placeholder="Item name / description" autocomplete="off"></td>'+
     '<td><div class="amtbox"><input type="text" inputmode="decimal" autocomplete="off" class="amt" placeholder="e.g. 100*5+20"><button class="inf" type="button" aria-label="Show calculation" aria-expanded="false" title="Show calculation">&#9432;</button></div><span class="ev"></span></td>'+
-    '<td class="sh">0%</td><td class="d"><input type="text" inputmode="text" autocomplete="off" class="dsc" placeholder="0.00" aria-label="Discount for this item"><span class="ev dev"></span></td><td class="ad">0.00</td><td class="tx"><input type="text" inputmode="text" autocomplete="off" class="txr" placeholder="0.00" aria-label="Tax for this item"><span class="ev tev"></span></td><td class="fi">0.00</td>'+
+    '<td class="sh">0%</td><td class="d"><input type="text" inputmode="text" autocomplete="off" class="dsc" placeholder="0.000" aria-label="Discount for this item"><span class="ev dev"></span></td><td class="ad">0.000</td><td class="tx"><input type="text" inputmode="text" autocomplete="off" class="txr" placeholder="0.000" aria-label="Tax for this item"><span class="ev tev"></span></td><td class="fi">0.000</td>'+
     '<td><button class="x" aria-label="Remove item">&#10005;</button></td>';
   if(name)tr.querySelector(".nm").value=name;   /* stays blank unless a name is given */
   if(amt!=null&&amt!=="")tr.querySelector(".amt").value=amt;   /* blank by default */
