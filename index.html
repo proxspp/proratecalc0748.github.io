@@ -738,9 +738,12 @@ a.power:hover .pi, a.power:focus-visible .pi{
 </div>
 <p class="note">Calculations always use full precision. The decimal toggle only changes how many decimals are shown, so a displayed total can differ from the sum of displayed rows by a small rounding amount.</p>
 <!-- Power button: only navigates (same tab) to the separate calculator page. To change the destination, edit the href below. -->
-<div class="pwr"><a id="powerBtn" class="power" href="prorate-calculator.html" target="_self" title="Open Prorate Calculator" aria-label="Open Prorate Calculator"><span class="pi" aria-hidden="true">&#x23FB;</span>Open Prorate Calculator</a></div>
+<div class="pwr">
+  <a id="powerBtn" class="power" href="open-prorate-calculator.html">
+    <span class="pi">&#x23FB;</span>
+    Open Prorate Calculator
+  </a>
 </div>
-
 <div id="pop" class="pop" role="dialog" aria-label="Calculation details" hidden></div>
 <script>
 var rowsEl=document.getElementById("rows"),n=0;
@@ -1187,4 +1190,5 @@ document.addEventListener("keyup",function(e){
 /* Items list starts completely empty: no sample rows. Add items with the button or the Alt key. */
 calc();
 </script>
+<a href="About.html">Open About page</a>  
 </body></html>
